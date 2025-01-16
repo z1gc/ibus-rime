@@ -224,6 +224,7 @@ static void ibus_rime_update_status(IBusRimeEngine *rime_engine,
   if (status &&
       rime_engine->status.is_disabled == status->is_disabled &&
       rime_engine->status.is_ascii_mode == status->is_ascii_mode &&
+      rime_engine->status.is_temp_ascii == status->is_temp_ascii &&
       rime_engine->status.schema_id && status->schema_id &&
       !strcmp(rime_engine->status.schema_id, status->schema_id)) {
     // no updates
@@ -232,6 +233,7 @@ static void ibus_rime_update_status(IBusRimeEngine *rime_engine,
 
   rime_engine->status.is_disabled = status ? status->is_disabled : False;
   rime_engine->status.is_ascii_mode = status ? status->is_ascii_mode : False;
+  rime_engine->status.is_temp_ascii = status ? status->is_temp_ascii : False;
   if (rime_engine->status.schema_id) {
     g_free(rime_engine->status.schema_id);
   }
@@ -245,6 +247,10 @@ static void ibus_rime_update_status(IBusRimeEngine *rime_engine,
     if (!status || status->is_disabled) {
       icon = IBUS_RIME_ICONS_DIR "/disabled.png";
       label = ibus_text_new_from_static_string("維護");
+    }
+    else if (status->is_temp_ascii) {
+      icon = IBUS_RIME_ICONS_DIR "/abc.png";
+      label = ibus_text_new_from_static_string("Insert");
     }
     else if (status->is_ascii_mode) {
       icon = IBUS_RIME_ICONS_DIR "/abc.png";
